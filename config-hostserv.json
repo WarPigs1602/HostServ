@@ -1,0 +1,10 @@
+[
+{"name":"host","value":"127.0.0.1"},
+{"name":"port","value":"4400"},
+{"name":"password","value":"password"},
+{"name":"nick","value":"H"},
+{"name":"servername","value":"hostserv.midiandmore.net"},
+{"name":"description","value":"MidiAndMore HostServ"},
+{"name":"identd","value":"hostserv"},
+{"name":"numeric","value":"ST"},
+]
