@@ -231,7 +231,7 @@ public class SocketThread implements Runnable, Software {
     }
 
     private String parse(String text) {
-        var buf = DigestUtils.md5Hex(text).toCharArray();
+        var buf = DigestUtils.sha256Hex(text).toCharArray();
         var sb = new StringBuilder();
         int i = 0;
         for (var chr : buf) {
