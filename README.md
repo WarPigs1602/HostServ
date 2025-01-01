@@ -5,4 +5,4 @@
  
  It hides the hosts for all users in your irc network :)
 
- It's recomened to compile the sources with NetBeans
+ It's recommened to compile the sources with NetBeans
