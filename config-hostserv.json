@@ -7,4 +7,6 @@
 {"name":"description","value":"MidiAndMore HostServ"},
 {"name":"identd","value":"hostserv"},
 {"name":"numeric","value":"ST"},
+{"name":"debug","value":"false"},
+{"name":"reg_host","value":".users.midiandmore.net"}
 ]
