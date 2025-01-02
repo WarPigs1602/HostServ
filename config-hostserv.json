@@ -8,5 +8,10 @@
 {"name":"identd","value":"hostserv"},
 {"name":"numeric","value":"ST"},
 {"name":"debug","value":"false"},
-{"name":"reg_host","value":".users.midiandmore.net"}
+{"name":"reg_host","value":".users.midiandmore.net"},
+{"name":"db","value":"newserv"},
+{"name":"dbuser","value":"newserv"},
+{"name":"dbpassword","value":"password"},
+{"name":"dbhost","value":"localhost"},
+{"name":"dbssl","value":"false"}
 ]
