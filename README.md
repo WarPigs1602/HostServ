@@ -1,5 +1,7 @@
 # HostServ
- This is the HostServ for the forked [snircd](https://github.com/WarPigs1602/snircd).
+ This is the HostServ. 
+ 
+ It's recommened to use the forked [snircd](https://github.com/WarPigs1602/snircd), because in the original snircd an issue with the user mode +h.
  
  It hides the hosts for all users in your irc network :)
 
