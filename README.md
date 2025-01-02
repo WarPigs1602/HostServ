@@ -1,7 +1,5 @@
 # HostServ
- The HostServ for the p10 protocol.
-
- This is the HostServ for the p10 protocol from snircd
+ This is the HostServ for [snircd](https://github.com/WarPigs1602/snircd).
  
  It hides the hosts for all users in your irc network :)
 
