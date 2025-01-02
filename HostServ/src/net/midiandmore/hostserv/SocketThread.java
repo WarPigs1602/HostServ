@@ -327,10 +327,140 @@ public class SocketThread implements Runnable, Software {
                 getNicks().remove(nick);
                 getHosts().remove(nick);
                 getX().remove(nick);
+            } else if (elem[1].equals("P") && elem[2].equals(getNumeric() + "AAA")) {
+                StringBuilder sb = new StringBuilder();
+                for (int i = 3; i < elem.length; i++) {
+                    sb.append(elem[i]);
+                    sb.append(" ");
+                }
+                var command = sb.toString().trim();
+                if (command.startsWith(":")) {
+                    command = command.substring(1);
+                }
+                var nick = getNicks().get(elem[0]);
+                var notice = "O";
+                if (!isNotice(nick)) {
+                    notice = "P";
+                }
+                var auth = command.split(" ");
+                if (auth[0].equalsIgnoreCase("SHOWCOMMANDS")) {
+                    sendText("%sAAA %s %s :HostServ Version %s", getNumeric(), notice, elem[0], VERSION);
+                    sendText("%sAAA %s %s :The following commands are available to you:", getNumeric(), notice, elem[0]);
+                    sendText("%sAAA %s %s :--- Commands available for users ---", getNumeric(), notice, elem[0]);
+                    if (isPrivileged(nick)) {
+                        sendText("%sAAA %s %s :HOST", getNumeric(), notice, elem[0]);
+                    }
+                    sendText("%sAAA %s %s :HELP", getNumeric(), notice, elem[0]);
+                    sendText("%sAAA %s %s :SHOWCOMMANDS", getNumeric(), notice, elem[0]);
+                    sendText("%sAAA %s %s :VERSION", getNumeric(), notice, elem[0]);
+                    sendText("%sAAA %s %s :End of list.", getNumeric(), notice, elem[0]);
+                } else if (auth[0].equalsIgnoreCase("VERSION")) {
+                    sendText("%sAAA %s %s :HostServ v%s by %s", getNumeric(), notice, elem[0], VERSION, VENDOR);
+                    sendText("%sAAA %s %s :By %s", getNumeric(), notice, elem[0], AUTHOR);
+                } else {
+                    sendText("%sAAA %s %s :Unknown command, or access denied.", getNumeric(), notice, elem[0]);
+                }                
             }
         }
     }
 
+    private boolean isNotice(String nick) {
+        if (!nick.isBlank()) {
+            var flags = getMi().getDb().getFlags(nick);
+            return isNotice(flags);
+        }
+        return true;
+    }
+
+    private boolean isPrivileged(int flags) {
+        if (!nick.isBlank()) {
+            var oper = isOper(flags);
+            if (oper == false) {
+                oper = isAdmin(flags);
+            }
+            if (oper == false) {
+                oper = isDev(flags);
+            }
+            return oper;
+        }
+        return false;
+    }
+
+    private boolean isPrivileged(String nick) {
+        if (!nick.isBlank()) {
+            var flags = getMi().getDb().getFlags(nick);
+            var oper = isOper(flags);
+            if (oper == false) {
+                oper = isAdmin(flags);
+            }
+            if (oper == false) {
+                oper = isDev(flags);
+            }
+            return oper;
+        }
+        return false;
+    }
+
+    private boolean isNoInfo(int flags) {
+        return flags == 0;
+    }
+
+    private boolean isInactive(int flags) {
+        return (flags & QUFLAG_INACTIVE) != 0;
+    }
+
+    private boolean isGline(int flags) {
+        return (flags & QUFLAG_GLINE) != 0;
+    }
+
+    private boolean isNotice(int flags) {
+        return (flags & QUFLAG_NOTICE) != 0;
+    }
+
+    private boolean isSuspended(int flags) {
+        return (flags & QUFLAG_SUSPENDED) != 0;
+    }
+
+    private boolean isOper(int flags) {
+        return (flags & QUFLAG_OPER) != 0;
+    }
+
+    private boolean isDev(int flags) {
+        return (flags & QUFLAG_DEV) != 0;
+    }
+
+    private boolean isProtect(int flags) {
+        return (flags & QUFLAG_PROTECT) != 0;
+    }
+
+    private boolean isHelper(int flags) {
+        return (flags & QUFLAG_HELPER) != 0;
+    }
+
+    private boolean isAdmin(int flags) {
+        return (flags & QUFLAG_ADMIN) != 0;
+    }
+
+    private boolean isInfo(int flags) {
+        return (flags & QUFLAG_INFO) != 0;
+    }
+
+    private boolean isDelayedGline(int flags) {
+        return (flags & QUFLAG_DELAYEDGLINE) != 0;
+    }
+
+    private boolean isNoAuthLimit(int flags) {
+        return (flags & QUFLAG_NOAUTHLIMIT) != 0;
+    }
+
+    private boolean isCleanupExempt(int flags) {
+        return (flags & QUFLAG_CLEANUPEXEMPT) != 0;
+    }
+
+    private boolean isStaff(int flags) {
+        return (flags & QUFLAG_STAFF) != 0;
+    }
+    
     private void joinChannel(String channel) {
         sendText("%sAAA J %s", getNumeric(), channel);
         sendText("%s M %s +o %sAAA", getNumeric(), channel, getNumeric());

@@ -55,6 +55,7 @@ public class HostServ implements Software {
     private Config config;
     private SocketThread socketThread;
     private WaitThread waitThread;
+    private Database db;
     
     /**
      * @param args the command line arguments
@@ -75,6 +76,21 @@ public class HostServ implements Software {
         System.out.println("By " + AUTHOR);
         System.out.println();
         setConfig(new Config(this, "config-hostserv.json"));
+        setDb(new Database(this));
         setWaitThread(new WaitThread(this));
+    }
+
+    /**
+     * @return the db
+     */
+    public Database getDb() {
+        return db;
+    }
+
+    /**
+     * @param db the db to set
+     */
+    public void setDb(Database db) {
+        this.db = db;
     }
 }
