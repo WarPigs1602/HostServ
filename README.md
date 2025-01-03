@@ -1,5 +1,5 @@
 # HostServ
- This is the HostServ. 
+ This is the HostServ, currently configured for newserv. 
  
  It's recommened to use the forked [snircd](https://github.com/WarPigs1602/snircd), because in the original snircd is an issue with the user mode +h.
  
