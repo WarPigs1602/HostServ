@@ -337,7 +337,7 @@ public class SocketThread implements Runnable, Software {
                 if (command.startsWith(":")) {
                     command = command.substring(1);
                 }
-                var nick = getNicks().get(elem[0]);
+                var nick = getAccounts().get(elem[0]);
                 var notice = "O";
                 if (!isNotice(nick)) {
                     notice = "P";
