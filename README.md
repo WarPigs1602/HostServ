@@ -7,5 +7,5 @@
 
  It's recommened to compile the sources with NetBeans
 
- As an alternative can you download a precompiled package [HostServ.zip](https://github.com/user-attachments/files/18297377/HostServ.zip).
+ As an alternative can you download a precompiled package [HostServ.zip](https://github.com/user-attachments/files/18307004/HostServ.zip).
  To run this service, you must use postgresql and jre17 or higher.
