@@ -126,6 +126,7 @@ public class SocketThread implements Runnable, Software {
     private byte[] ip;
     private HashMap<String, String> nicks;
     private HashMap<String, String> hosts;
+    private HashMap<String, String> hiddenHosts;
     private HashMap<String, String> accounts;
     private HashMap<String, String> x;
     private boolean reg;
@@ -135,6 +136,7 @@ public class SocketThread implements Runnable, Software {
         setNicks(new HashMap<>());
         setHosts(new HashMap<>());
         setAccounts(new HashMap<>());
+        setHiddenHosts(new HashMap<>());
         setX(new HashMap<>());
         setReg(false);
         (thread = new Thread(this)).start();
@@ -247,11 +249,22 @@ public class SocketThread implements Runnable, Software {
     protected void parseLine(String text) {
         var p = getMi().getConfig().getConfigFile();
         text = text.trim();
+        var elem = text.split(" ");
         if (text.startsWith("SERVER")) {
             setServerNumeric(text.split(" ")[6].substring(0, 1));
             System.out.println("Getting SERVER response...");
+        } else if (elem[1].equals("GL")) { // Gline fix on vhosts
+            elem = text.split(" ",7);
+            var target = elem[3];
+            var expire = elem[4];
+            var reason = elem[6];
+            var host = target.split("@")[1];
+            var realHost = getHiddenHosts().containsKey(host) ? getHiddenHosts().get(host) : host;
+            if (getHiddenHosts().containsKey(host)) {
+                sendText("%s GL * %s %s %s :%s", getNumeric(), target.replace(host, realHost), expire, System.currentTimeMillis() / 1000, reason);
+            }
         } else if (getServerNumeric() != null) {
-            var elem = text.split(" ");
+
             if (elem[1].equals("N") && elem.length > 4) {
                 var priv = elem[7].contains("r");
                 var hidden = elem[7].contains("h");
@@ -281,6 +294,9 @@ public class SocketThread implements Runnable, Software {
                 getAccounts().put(nick, acc);
                 getNicks().put(nick, elem[2]);
                 getHosts().put(nick, elem[5] + "@" + elem[6]);
+                if(!getHiddenHosts().containsValue(elem[6])) {
+                    getHiddenHosts().put(parseCloak(elem[6]), elem[6]);
+                }
                 getX().put(nick, x ? "true" : "false");
 
             } else if (elem[1].equals("N") && elem.length == 4) {
@@ -359,7 +375,7 @@ public class SocketThread implements Runnable, Software {
                     sendText("%sAAA %s %s :By %s", getNumeric(), notice, elem[0], AUTHOR);
                 } else {
                     sendText("%sAAA %s %s :Unknown command, or access denied.", getNumeric(), notice, elem[0]);
-                }                
+                }
             }
         }
     }
@@ -460,7 +476,7 @@ public class SocketThread implements Runnable, Software {
     private boolean isStaff(int flags) {
         return (flags & QUFLAG_STAFF) != 0;
     }
-    
+
     private void joinChannel(String channel) {
         sendText("%sAAA J %s", getNumeric(), channel);
         sendText("%s M %s +o %sAAA", getNumeric(), channel, getNumeric());
@@ -673,5 +689,19 @@ public class SocketThread implements Runnable, Software {
      */
     public void setX(HashMap<String, String> x) {
         this.x = x;
+    }
+
+    /**
+     * @return the hiddenHosts
+     */
+    public HashMap<String, String> getHiddenHosts() {
+        return hiddenHosts;
+    }
+
+    /**
+     * @param hiddenHosts the hiddenHosts to set
+     */
+    public void setHiddenHosts(HashMap<String, String> hiddenHosts) {
+        this.hiddenHosts = hiddenHosts;
     }
 }
