@@ -261,7 +261,7 @@ public class SocketThread implements Runnable, Software {
             var host = target.split("@")[1];
             var realHost = getHiddenHosts().containsKey(host) ? getHiddenHosts().get(host) : host;
             if (getHiddenHosts().containsKey(host)) {
-                sendText("%s GL * %s %s %s :%s", getNumeric(), target.replace(host, realHost), expire, System.currentTimeMillis() / 1000, reason);
+                sendText("%s GL * %s %s %s %s", getNumeric(), target.replace(host, realHost), expire, System.currentTimeMillis() / 1000, reason);
             }
         } else if (getServerNumeric() != null) {
 
